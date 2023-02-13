@@ -10,9 +10,9 @@ def print_hi(name):
     aps = Aps78213("192.168.0.142", 23, 1)
     # aps.connect()
     print(aps.connection_check(), aps.execute_self_test())
-    print(aps.output_status())
+    print(aps.meassure_output_vector_dict())
     time.sleep(1)
-    aps.turn_output_on()
+    # aps.turn_output_on()
     time.sleep(1)
 
 

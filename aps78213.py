@@ -108,7 +108,7 @@ class Aps78213(telnetlib.Telnet, object):
         else:
             return False
 
-    def output_status(self) -> int:
+    def output_status(self):
         self.write(b":OUTPut:STATe?\n")
         # return self.tn.read_until(b"\n", 2).decode('ascii')
         a = self.read_until(b"\n", 2).decode('ascii')
@@ -129,16 +129,16 @@ class Aps78213(telnetlib.Telnet, object):
         # return self.tn.read_until(b"\n", 2).decode('ascii')
         return None
 
-    def meassure_output_voltage(self) -> float:
+    def meassure_output_voltage(self):
         self.write(b":MEASure:SCALar:VOLTage:RMS?\n")
         # return self.tn.read_until(b"\n", 2).decode('ascii')
         a = self.read_until(b"\n", 2).decode('ascii')
-        if a[0] == "+":
+        if len(a)>0 and a[0] == "+":
             return float(a[1:-1])
         else:
             return -1
 
-    def meassure_output_active_power(self) -> float:
+    def meassure_output_active_power(self):
         self.write(b":MEASure:SCALar:POWer:AC:REAL?\n")
         # return self.tn.read_until(b"\n", 2).decode('ascii')
         a = self.read_until(b"\n", 2).decode('ascii')
@@ -147,7 +147,7 @@ class Aps78213(telnetlib.Telnet, object):
         else:
             return -1
 
-    def meassure_output_frequency(self) -> float:
+    def meassure_output_frequency(self):
         self.write(b":MEASure:SCALar:FREQuency?\n")
         # return self.tn.read_until(b"\n", 2).decode('ascii')
         a = self.read_until(b"\n", 2).decode('ascii')
@@ -156,7 +156,7 @@ class Aps78213(telnetlib.Telnet, object):
         else:
             return -1
 
-    def meassure_output_current(self) -> float:
+    def meassure_output_current(self):
         self.write(b":MEASure:SCALar:CURRent:RMS?\n")
         # return self.tn.read_until(b"\n", 2).decode('ascii')
         a = self.read_until(b"\n", 2).decode('ascii')
@@ -165,7 +165,7 @@ class Aps78213(telnetlib.Telnet, object):
         else:
             return -1
 
-    def meassure_output_vector_dict(self) -> dict[str | Any, float] | None:
+    def meassure_output_vector_dict(self):
         self.write(b":NUMeric:NORMal:VALue?\n")
         # return self.tn.read_until(b"\n", 2).decode('ascii')
         a = self.read_until(b"\n", 2).decode('ascii').split(',')
@@ -175,7 +175,7 @@ class Aps78213(telnetlib.Telnet, object):
         else:
             return None
 
-    def meassure_output_vector_list(self) -> list[float] | None:
+    def meassure_output_vector_list(self):
         self.write(b":NUMeric:NORMal:VALue?\n")
         # return self.tn.read_until(b"\n", 2).decode('ascii')
         a = self.read_until(b"\n", 2).decode('ascii').split(',')
@@ -185,7 +185,7 @@ class Aps78213(telnetlib.Telnet, object):
         else:
             return None
 
-    def meassure_power_vector(self) -> tuple[float, float, float, float, float, float] | int:
+    def meassure_power_vector(self):
         self.write(b":READ?\n")
         # return self.tn.read_until(b"\n", 2).decode('ascii')
         a = self.read_until(b"\n", 2).decode('ascii')
@@ -202,7 +202,7 @@ class Aps78213(telnetlib.Telnet, object):
         else:
             return -1
 
-    def set_output_voltage(self, volt: int | float) -> bool:
+    def set_output_voltage(self, volt):
         if 100 < volt < 310:
             volt = round(volt, 1)
             command = f":VOLT {volt}\n".encode('ascii')
@@ -211,7 +211,7 @@ class Aps78213(telnetlib.Telnet, object):
         else:
             return False
 
-    def set_output_frequency(self, freq: int | float) -> bool:
+    def set_output_frequency(self, freq):
         if 44 < freq < 56:
             freq = round(freq, 1)
             command = f":FREQ {freq}\n".encode('ascii')
@@ -220,7 +220,7 @@ class Aps78213(telnetlib.Telnet, object):
         else:
             return False
 
-    def set_current_limit(self, current: int | float) -> bool:
+    def set_current_limit(self, current):
         if 1 < current < 4:
             current = round(current, 1)
             command = f":CURR:LIM:RMS {current}\n".encode('ascii')
@@ -229,7 +229,7 @@ class Aps78213(telnetlib.Telnet, object):
         else:
             return False
 
-    def set_voltage_limit(self, volt: int | float) -> bool:
+    def set_voltage_limit(self, volt):
         if 120 < volt < 311:
             volt = round(volt, 1)
             command = f":VOLTage:LIMit:RMS {volt}\n".encode('ascii')
@@ -238,47 +238,47 @@ class Aps78213(telnetlib.Telnet, object):
         else:
             return False
 
-    def set_dysplay_mod(self) -> bool:
+    def set_dysplay_mod(self):
         command = f":DISP:DES:MODE SIMPle\n".encode('ascii')
         self.write(command)
         return True
 
-    def set_dysp(self) -> bool:
+    def set_dysp(self):
         command = f":DISP:DES:MODE SIMPle\n".encode('ascii')
         self.write(command)
         return True
 
-    def set_input_mode_acdc(self) -> bool:
+    def set_input_mode_acdc(self):
         command = f":INPut:MODE ACDC\r\n".encode('ascii')
         self.write(command)
         return True
 
-    def set_input_voltage_range_300v(self) -> bool:
+    def set_input_voltage_range_300v(self):
         command = f":INPUT:VOLTAGE:RANGE 300V\r\n".encode('ascii')
         self.write(command)
         return True
 
-    def set_input_current_auto_mode(self) -> bool:
+    def set_input_current_auto_mode(self):
         command = f":INPUT:CURRENT:AUTO ON\r\n".encode('ascii')
         self.write(command)
         return True
 
-    def set_input_filter_on(self) -> bool:
+    def set_input_filter_on(self):
         command = f":INPUT:FILTER ON\r\n".encode('ascii')
         self.write(command)
         return True
 
-    def set_input_filter_avg_4(self) -> bool:
+    def set_input_filter_avg_4(self):
         command = f":MEASURE:AVERAGING:COUNT 4\r\n".encode('ascii')
         self.write(command)
         return True
 
-    def set_measure_vector_lenght_28(self) -> bool:
+    def set_measure_vector_lenght_28(self):
         command = f":NUMERIC:NORMAL:NUMBER 28\r\n".encode('ascii')
         self.write(command)
         return True
 
-    def set_standart_measure_vector_order(self) -> bool:
+    def set_standart_measure_vector_order(self):
         command = f":NUMERIC:NORMAL:ITEM1 U\r\n".encode('ascii')
         self.write(command)
         command = f":NUMERIC:NORMAL:ITEM2 I\r\n".encode('ascii')
@@ -338,17 +338,17 @@ class Aps78213(telnetlib.Telnet, object):
         command = f":NUMERIC:NORMAL:ITEM28 IRANge\r\n".encode('ascii')
         self.write(command)
 
-    def set_harmonic_thd_fundamental(self) -> bool:
+    def set_harmonic_thd_fundamental(self):
         command = f":HARMONICS:THD FUNDAMENTAL\n".encode('ascii')
         self.write(command)
         return True
 
-    def set_turnon_with_power_off(self) -> bool:
+    def set_turnon_with_power_off(self):
         command = f":OUTPut:PON OFF\n".encode('ascii')
         self.write(command)
         return True
 
-    def clear_internal_error(self) -> bool:
+    def clear_internal_error(self):
         command = f"*CLS\n".encode('ascii')
         self.write(command)
         return True
