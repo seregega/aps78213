@@ -58,12 +58,15 @@ class Aps78213(telnetlib.Telnet, object):
         super(Aps78213, self).__init__(host, port, timeout)
         self.set_input_mode_acdc()
         self.set_input_voltage_range_300v()
-        self.set_input_current_auto_mode()
+        self.set_input_current_auto_mode_on()
         self.set_harmonic_thd_fundamental()
         self.set_input_filter_on()
         self.set_input_filter_avg_4()
         self.set_measure_vector_lenght_28()
         self.set_standart_measure_vector_order()
+        self.set_integrate_mode_manual()
+        self.set_integrate_function_watt_hour()
+        self.set_integrate_reset()
 
         # telnetlib.Telnet.__init__(self)
         # client = telnetlib.Telnet()
@@ -258,10 +261,22 @@ class Aps78213(telnetlib.Telnet, object):
         self.write(command)
         return True
 
-    def set_input_current_auto_mode(self):
+    def set_input_current_auto_mode_on(self):
         command = f":INPUT:CURRENT:AUTO ON\r\n".encode('ascii')
         self.write(command)
         return True
+    
+    def set_input_current_auto_mode_off(self):
+        command = f":INPUT:CURRENT:AUTO 0\r\n".encode('ascii')
+        self.write(command)
+        return True
+    
+    def set_input_current_range_5A(self):
+        command = f":INPUT:CURRENT:RANGE 5\r\n".encode('ascii')
+        self.write(command)
+        return True
+    
+    
 
     def set_input_filter_on(self):
         command = f":INPUT:FILTER ON\r\n".encode('ascii')
@@ -277,6 +292,33 @@ class Aps78213(telnetlib.Telnet, object):
         command = f":NUMERIC:NORMAL:NUMBER 28\r\n".encode('ascii')
         self.write(command)
         return True
+    
+    def set_integrate_mode_manual(self):
+        command = f":INTEGRATE:MODE MANUAL\r\n".encode('ascii')
+        self.write(command)
+        return True
+    
+    def set_integrate_function_watt_hour(self):
+        command = f":INTEGRATE:FUNCTION WATT\r\n".encode('ascii')
+        self.write(command)
+        return True
+    
+    def set_integrate_start(self):
+        command = f":INTEGRATE:START\r\n".encode('ascii')
+        self.write(command)
+        return True
+    
+    def set_integrate_stop(self):
+        command = f":INTEGRATE:STOP\r\n".encode('ascii')
+        self.write(command)
+        return True
+    
+    def set_integrate_reset(self):
+        command = f":INTEGRATE:RESET\r\n".encode('ascii')
+        self.write(command)
+        return True
+    
+
 
     def set_standart_measure_vector_order(self):
         command = f":NUMERIC:NORMAL:ITEM1 U\r\n".encode('ascii')
